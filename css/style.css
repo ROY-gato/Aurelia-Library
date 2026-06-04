@@ -60,7 +60,7 @@ a { text-decoration: none; color: inherit; }
 .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 
 /* Book Grid */
-.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+.book-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
 .book-card .card-img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: var(--border); }
 .book-card .card-body { padding: 10px 12px 14px; }
 .book-card .card-body h4 { font-size: 0.85rem; margin-bottom: 2px; }
@@ -188,7 +188,7 @@ a { text-decoration: none; color: inherit; }
 /* Responsive */
 @media (max-width: 768px) {
   .nav-links { gap: 12px; font-size: 0.78rem; }
-  .book-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+  .book-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .detail-wrap { grid-template-columns: 1fr; }
   .detail-wrap img { max-width: 220px; }
   .hero h1 { font-size: 1.5rem; }
@@ -200,6 +200,7 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 480px) {
   .nav-links { gap: 8px; font-size: 0.72rem; }
   .book-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .book-grid .card-actions { flex-direction: column; }
   .filter-bar { flex-direction: column; }
   .chat-popup { width: calc(100% - 24px); right: 12px; }
 }
