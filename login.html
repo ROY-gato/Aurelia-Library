@@ -3,77 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookNest - Sign In</title>
+  <title>Sign In - Aurelia Library</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <nav class="navbar">
     <div class="container">
-      <a href="index.html" class="logo">Book<span>Nest</span></a>
+      <a href="index.html" class="logo">Aurelia<span> Library</span></a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="catalog.html">Catalog</a></li>
-        <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="nav-icons">
-        <a href="cart.html">&#128722; <span class="badge cart-count" style="display:none">0</span></a>
+        <div id="userMenu"></div>
       </div>
     </div>
   </nav>
 
-  <div class="auth-page">
-    <div class="auth-card">
-      <div class="header">
-        <span class="auth-logo">Book<span>Nest</span></span>
-        <h2>Welcome Back</h2>
-        <p>Sign in to your account</p>
-      </div>
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" placeholder="demo@booknest.com" required>
-          <span class="error-msg">Please enter a valid email</span>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <div class="pw-field">
-            <input type="password" id="loginPass" placeholder="password123" required>
-            <button type="button" class="pw-toggle" onclick="const i=document.getElementById('loginPass');i.type=i.type==='password'?'text':'password'">&#128065;</button>
-          </div>
-          <span class="error-msg">Password is required</span>
-        </div>
-        <div class="remember-line">
-          <label><input type="checkbox" checked> Remember me</label>
-          <a href="#" style="color:var(--primary);font-size:0.8rem">Forgot?</a>
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
+  <div class="auth-wrap">
+    <div class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Welcome Back
+      </h2>
+      <p class="sub">Sign in to buy books, reserve titles, and register for events.</p>
+      <form onsubmit="login(event)">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="demo@lib.com" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPass" placeholder="demo123" required></div>
+        <div id="loginError" style="color:var(--danger);font-size:0.82rem;margin-bottom:10px"></div>
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
       </form>
-      <div style="text-align:center;margin:1rem 0;color:var(--text-muted);font-size:0.8rem">Demo: demo@booknest.com / password123</div>
-      <div class="auth-footer">Don't have an account? <a href="register.html">Create one</a></div>
+      <div class="switch">Don't have an account? <a href="register.html">Register</a></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:var(--radius);font-size:0.78rem;color:var(--text-light)">
+        <strong>Demo:</strong> demo@lib.com / demo123
+      </div>
     </div>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    async function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPass').value;
-      let ok = true;
-      if (!email || !email.includes('@')) { document.getElementById('loginEmail').closest('.form-group').classList.add('error'); ok = false; } else { document.getElementById('loginEmail').closest('.form-group').classList.remove('error'); }
-      if (!pass) { document.getElementById('loginPass').closest('.form-group').classList.add('error'); ok = false; } else { document.getElementById('loginPass').closest('.form-group').classList.remove('error'); }
-      if (!ok) return;
+  <footer class="footer">
+    <div class="container">
+      <p>Aurelia Library &copy; 2026</p>
+      <p class="tagline">a quiet place for every story</p>
+    </div>
+  </footer>
 
-      const success = await login(email, pass);
-      if (success) {
-        toast('Welcome back! Redirecting...');
-        setTimeout(() => window.location = 'index.html', 500);
-      } else {
-        toast('Invalid email or password.', 'error');
-      }
-    }
-  </script>
+  <div id="toastBox"></div>
+  <script src="js/app.js"></script>
 </body>
 </html>

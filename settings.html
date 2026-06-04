@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catalog - Aurelia Library</title>
+  <title>Settings - Aurelia Library</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
       <a href="index.html" class="logo">Aurelia<span> Library</span></a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="catalog.html" class="active">Catalog</a></li>
+        <li><a href="catalog.html">Catalog</a></li>
       </ul>
       <div class="nav-icons">
         <a href="cart.html" class="icon-link">
@@ -26,19 +26,24 @@
   </nav>
 
   <div class="container" style="padding-top:32px">
-    <h2 class="page-title">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Book Catalog
-    </h2>
-    <div class="filter-bar">
-      <input type="text" id="catalogSearch" placeholder="Search by title or author..." oninput="filterCatalog()">
-      <select id="catalogGenre" onchange="filterCatalog()">
-        <option value="all">All Genres</option>
-        <option>Classic</option><option>Dystopian</option><option>Fantasy</option>
-        <option>Fiction</option><option>Romance</option><option>Satire</option>
-      </select>
+    <div class="settings-wrap">
+      <div class="card">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Account Settings
+        </h2>
+        <p class="sub" style="color:var(--text-light);font-size:0.82rem;margin-bottom:20px">Update your profile information.</p>
+        <form onsubmit="saveSettings(event)">
+          <div class="form-group"><label>Full Name</label><input type="text" id="setName" required></div>
+          <div class="form-group"><label>Email</label><input type="email" id="setEmail" required></div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+          <div class="form-group"><label>Current Password</label><input type="password" id="setCurPass" placeholder="Leave blank to keep current"></div>
+          <div class="form-group"><label>New Password</label><input type="password" id="setNewPass" placeholder="At least 4 characters"></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" id="setConfirm" placeholder="Repeat new password"></div>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:8px">Save Settings</button>
+        </form>
+      </div>
     </div>
-    <div class="book-grid" id="catalogBooks"></div>
   </div>
 
   <footer class="footer">
@@ -68,16 +73,6 @@
 
   <div id="toastBox"></div>
   <script src="js/app.js"></script>
-  <script>
-    function filterCatalog() {
-      const search = (document.getElementById('catalogSearch').value || '').toLowerCase();
-      const genre = document.getElementById('catalogGenre').value;
-      let f = BOOKS;
-      if (search) f = f.filter(b => b.title.toLowerCase().includes(search) || b.author.toLowerCase().includes(search));
-      if (genre !== 'all') f = f.filter(b => b.genre === genre);
-      renderBooks(f, 'catalogBooks');
-    }
-    document.addEventListener('DOMContentLoaded', () => renderBooks(BOOKS, 'catalogBooks'));
-  </script>
+  <script>document.addEventListener('DOMContentLoaded', renderSettings);</script>
 </body>
 </html>

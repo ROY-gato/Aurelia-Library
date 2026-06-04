@@ -3,89 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BookNest - Register</title>
+  <title>Register - Aurelia Library</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <nav class="navbar">
     <div class="container">
-      <a href="index.html" class="logo">Book<span>Nest</span></a>
+      <a href="index.html" class="logo">Aurelia<span> Library</span></a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="catalog.html">Catalog</a></li>
-        <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="nav-icons">
-        <a href="cart.html">&#128722; <span class="badge cart-count" style="display:none">0</span></a>
+        <div id="userMenu"></div>
       </div>
     </div>
   </nav>
 
-  <div class="auth-page">
-    <div class="auth-card">
-      <div class="header">
-        <span class="auth-logo">Book<span>Nest</span></span>
-        <h2>Create Account</h2>
-        <p>Join our community of readers</p>
-      </div>
-      <form onsubmit="handleRegister(event)">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="regName" placeholder="John Doe" required>
-          <span class="error-msg">Name is required</span>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="regEmail" placeholder="john@example.com" required>
-          <span class="error-msg">Valid email required</span>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <div class="pw-field">
-            <input type="password" id="regPass" placeholder="At least 6 characters" required minlength="6">
-            <button type="button" class="pw-toggle" onclick="const i=document.getElementById('regPass');i.type=i.type==='password'?'text':'password'">&#128065;</button>
-          </div>
-          <span class="error-msg">Minimum 6 characters</span>
-        </div>
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <input type="password" id="regConfirm" placeholder="Confirm password" required>
-          <span class="error-msg">Passwords do not match</span>
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Create Account</button>
+  <div class="auth-wrap">
+    <div class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Create Account
+      </h2>
+      <p class="sub">Join Aurelia Library for free and start exploring.</p>
+      <form onsubmit="register(event)">
+        <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="Your name" required></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" placeholder="you@example.com" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPass" placeholder="At least 4 characters" required></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="regConfirm" placeholder="Repeat password" required></div>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
       </form>
-      <div class="auth-footer">Already have an account? <a href="login.html">Sign in</a></div>
+      <div class="switch">Already have an account? <a href="login.html">Sign In</a></div>
     </div>
   </div>
 
+  <footer class="footer">
+    <div class="container">
+      <p>Aurelia Library &copy; 2026</p>
+      <p class="tagline">a quiet place for every story</p>
+    </div>
+  </footer>
+
   <div id="toastBox"></div>
-  <script src="js/data.js"></script>
   <script src="js/app.js"></script>
-  <script>
-    function handleRegister(e) {
-      e.preventDefault();
-      const name = document.getElementById('regName').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const pass = document.getElementById('regPass').value;
-      const confirm = document.getElementById('regConfirm').value;
-      let ok = true;
-
-      if (!name) { document.getElementById('regName').closest('.form-group').classList.add('error'); ok = false; } else { document.getElementById('regName').closest('.form-group').classList.remove('error'); }
-      if (!email || !email.includes('@')) { document.getElementById('regEmail').closest('.form-group').classList.add('error'); ok = false; } else { document.getElementById('regEmail').closest('.form-group').classList.remove('error'); }
-      if (!pass || pass.length < 6) { document.getElementById('regPass').closest('.form-group').classList.add('error'); ok = false; } else { document.getElementById('regPass').closest('.form-group').classList.remove('error'); }
-      if (pass !== confirm) { document.getElementById('regConfirm').closest('.form-group').classList.add('error'); ok = false; } else { document.getElementById('regConfirm').closest('.form-group').classList.remove('error'); }
-
-      if (!ok) return;
-
-      const success = register(name, email, pass);
-      if (success) {
-        toast('Account created! Welcome to BookNest.');
-        setTimeout(() => window.location = 'index.html', 500);
-      } else {
-        toast('This email is already registered.', 'error');
-      }
-    }
-  </script>
 </body>
 </html>
