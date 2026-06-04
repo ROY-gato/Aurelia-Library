@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aurelia Library</title>
+  <title>My Reservations - Aurelia Library</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
     <div class="container">
       <a href="index.html" class="logo">Aurelia<span> Library</span></a>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="catalog.html">Catalog</a></li>
         <li><a href="about.html">About</a></li>
       </ul>
@@ -26,43 +26,23 @@
     </div>
   </nav>
 
-  <div class="hero">
-    <div class="container">
-      <h1>Aurelia <span>Library</span></h1>
-      <div class="tagline">"a quiet place for every story"</div>
-      <p>Browse, buy, or reserve books. Join activities and be part of our community.</p>
-      <div class="hero-btns">
-        <a href="catalog.html" class="btn btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          Browse Catalog
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="section-title">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Library Activities
-    </div>
-    <div class="activity-grid" id="homeActivities"></div>
-
-    <div class="section-title">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      New Arrivals
-    </div>
-    <div class="book-grid" id="homeNewBooks"></div>
+  <div class="container" style="padding-top:32px">
+    <h2 class="page-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      My Reservations
+    </h2>
+    <p style="color:var(--text-light);margin-bottom:20px;font-size:0.85rem">Books reserved for in-library reading. Pick them up at the front desk within 48 hours.</p>
+    <div id="reservItems"></div>
   </div>
 
   <footer class="footer">
     <div class="container">
-      <div class="footer-links"><a href="about.html">About</a><span>&middot;</span><a href="index.html" class="active">Home</a><span>&middot;</span><a href="catalog.html">Catalog</a><span>&middot;</span><a href="cart.html">Cart</a></div>
+      <div class="footer-links"><a href="about.html">About</a><span>&middot;</span><a href="index.html">Home</a><span>&middot;</span><a href="catalog.html">Catalog</a><span>&middot;</span><a href="cart.html">Cart</a></div>
       <p>Aurelia Library &copy; 2026</p>
       <p class="tagline">a quiet place for every story</p>
     </div>
   </footer>
 
-  <!-- Floating Chat -->
   <button class="chat-fab" onclick="toggleChat()">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
   </button>
@@ -82,12 +62,6 @@
 
   <div id="toastBox"></div>
   <script src="js/app.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      renderActivities('homeActivities');
-      const na = [...BOOKS].sort((a, b) => b.id - a.id).slice(0, 6);
-      renderBooks(na, 'homeNewBooks', true);
-    });
-  </script>
+  <script>document.addEventListener('DOMContentLoaded', renderReservPage);</script>
 </body>
 </html>

@@ -101,11 +101,17 @@ function renderUserMenu() {
   }
   el.innerHTML = '<span class="user-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">' + I.user + ' ' + u.name + '</span>' +
     '<div class="dropdown">' +
-    '<a href="settings.html">' + I.gear + ' Settings</a>' +
+    '<a href="profile.html">' + I.user + ' Profile</a>' +
+    '<a href="reservations.html">' + I.cal + ' Reservations</a>' +
+    '<a href="history.html">' + I.book + ' History</a>' +
+    '<hr><a href="settings.html">' + I.gear + ' Settings</a>' +
     '<hr><a href="#" onclick="logout()">' + I.x + ' Sign Out</a></div>';
 }
 function logout() {
   localStorage.removeItem(S.user);
+  localStorage.removeItem(S.cart);
+  localStorage.removeItem(S.reserv);
+  localStorage.removeItem(S.acts);
   renderUserMenu(); updateBadges();
   toast('Signed out');
 }
@@ -265,6 +271,45 @@ function placeOrder(e) {
   closeCheckout();
   toast('Order placed successfully!');
   renderCartPage();
+}
+
+// ── Borrowing History ──────────────────────────────
+const BORROW_HISTORY = [
+  { id: 1, book: 'To Kill a Mockingbird', author: 'Harper Lee', borrow: '2026-03-15', due: '2026-04-12', returned: '2026-04-10' },
+  { id: 2, book: '1984', author: 'George Orwell', borrow: '2026-02-01', due: '2026-03-01', returned: '2026-02-25' },
+  { id: 3, book: 'The Great Gatsby', author: 'F. Scott Fitzgerald', borrow: '2026-01-10', due: '2026-02-07', returned: '2026-02-05' },
+  { id: 4, book: 'Pride and Prejudice', author: 'Jane Austen', borrow: '2025-12-05', due: '2026-01-02', returned: '2026-01-01' },
+  { id: 5, book: 'The Hobbit', author: 'J.R.R. Tolkien', borrow: '2025-11-20', due: '2025-12-18', returned: '2025-12-15' },
+  { id: 6, book: 'Dune', author: 'Frank Herbert', borrow: '2025-10-08', due: '2025-11-05', returned: '2025-11-03' },
+  { id: 7, book: 'Harry Potter and the Sorcerer\'s Stone', author: 'J.K. Rowling', borrow: '2025-09-14', due: '2025-10-12', returned: '2025-10-10' },
+  { id: 8, book: 'The Alchemist', author: 'Paulo Coelho', borrow: '2025-08-01', due: '2025-08-29', returned: '2025-08-28' }
+];
+
+function renderHistory() {
+  const el = document.getElementById('historyTable');
+  if (!el) return;
+  el.innerHTML = '<table class="history-table"><thead><tr><th>Book</th><th>Author</th><th>Borrow Date</th><th>Due Date</th><th>Returned</th><th>Status</th></tr></thead><tbody>' +
+    BORROW_HISTORY.map(h => {
+      const bd = new Date(h.borrow);
+      const dd = new Date(h.due);
+      const rd = new Date(h.returned);
+      const onTime = rd <= dd;
+      return '<tr><td><strong>' + h.book + '</strong></td><td>' + h.author + '</td><td>' + bd.toLocaleDateString() + '</td><td>' + dd.toLocaleDateString() + '</td><td>' + rd.toLocaleDateString() + '</td>' +
+        '<td><span class="status-badge ' + (onTime ? 'badge-success' : 'badge-warn') + '">' + (onTime ? 'On Time' : 'Late') + '</span></td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+// ── Profile ────────────────────────────────────────
+function renderProfile() {
+  const u = user();
+  if (!u) { window.location.href = 'login.html'; return; }
+  document.getElementById('profName').textContent = u.name;
+  document.getElementById('profEmail').textContent = u.email;
+  const reserv = g(S.reserv) || [];
+  document.getElementById('profReserv').textContent = reserv.length;
+  document.getElementById('profBorrowed').textContent = BORROW_HISTORY.length;
+  const initials = u.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  document.getElementById('profAvatar').textContent = initials;
 }
 
 // ── Floating Chat Widget ───────────────────────────
