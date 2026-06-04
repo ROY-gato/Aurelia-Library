@@ -99,7 +99,8 @@ function renderUserMenu() {
     el.innerHTML = '<a href="login.html" class="icon-link">' + I.user + '</a>';
     return;
   }
-  el.innerHTML = '<span class="user-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">' + I.user + ' ' + u.name + '</span>' +
+  el.innerHTML = '<a href="cart.html" class="icon-link">' + I.cart + '<span class="badge cart-badge" style="display:none">0</span></a>' +
+    '<span class="user-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">' + I.user + ' ' + u.name + '</span>' +
     '<div class="dropdown">' +
     '<a href="profile.html">' + I.user + ' Profile</a>' +
     '<a href="reservations.html">' + I.cal + ' Reservations</a>' +
@@ -201,6 +202,7 @@ function qtyUpd(id, q) {
 }
 
 function renderCartPage() {
+  if (!logged()) { window.location.href = 'login.html'; return; }
   const el = document.getElementById('cartItems');
   const sum = document.getElementById('cartSummary');
   if (!el) return;
@@ -286,6 +288,7 @@ const BORROW_HISTORY = [
 ];
 
 function renderHistory() {
+  if (!logged()) { window.location.href = 'login.html'; return; }
   const el = document.getElementById('historyTable');
   if (!el) return;
   el.innerHTML = '<table class="history-table"><thead><tr><th>Book</th><th>Author</th><th>Borrow Date</th><th>Due Date</th><th>Returned</th><th>Status</th></tr></thead><tbody>' +
