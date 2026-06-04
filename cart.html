@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest - Cart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">Book<span>Nest</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="catalog.html">Catalog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-icons">
+        <a href="catalog.html">&#128270;</a>
+        <a href="wishlist.html">&#9825; <span class="badge wish-count" style="display:none">0</span></a>
+        <a href="cart.html">&#128722; <span class="badge cart-count" style="display:none">0</span></a>
+        <a href="login.html">&#128100;</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="section">
+      <div class="container">
+        <h2 class="section-title">Shopping Cart</h2>
+        <div id="cartContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col"><h3>Book<span>Nest</span></h3><p>Your cozy corner of the literary world.</p></div>
+        <div class="footer-col"><h4>Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Catalog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Privacy</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 BookNest</p></div>
+    </div>
+  </footer>
+
+  <div id="toastBox"></div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function renderCart() {
+      const el = document.getElementById('cartContent');
+      if (cart.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">&#128722;</div><h3>Your cart is empty</h3><p>Add some books from our catalog!</p><a href="catalog.html" class="btn btn-primary">Browse Books</a></div>';
+        return;
+      }
+      const sub = cartTotal();
+      const ship = sub >= 25 ? 0 : 5.99;
+      const tax = sub * 0.08;
+      const total = sub + ship + tax;
+
+      el.innerHTML = `<div class="cart-wrap">
+        <div class="cart-list">
+          ${cart.map(item => `
+            <div class="cart-item">
+              <div class="thumb"><div class="book-cover" style="background:${getCover(item.category)}"><div class="bt" style="font-size:0.6rem">${item.title}</div></div></div>
+              <div class="cart-item-info">
+                <h4>${item.title}</h4>
+                <div class="author">${item.author}</div>
+                <div class="item-price">$${(item.price * item.qty).toFixed(2)}</div>
+              </div>
+              <div class="cart-item-actions">
+                <div class="qty"><button onclick="updateQty(${item.id},-1)">−</button><span>${item.qty}</span><button onclick="updateQty(${item.id},1)">+</button></div>
+                <button class="remove-btn" onclick="removeFromCart(${item.id})" title="Remove">&#128465;</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="cart-summary">
+          <h3>Order Summary</h3>
+          <div class="summary-row"><span>Subtotal</span><span>$${sub.toFixed(2)}</span></div>
+          <div class="summary-row"><span>Shipping</span><span>${ship === 0 ? 'FREE' : '$'+ship.toFixed(2)}</span></div>
+          <div class="summary-row"><span>Tax</span><span>$${tax.toFixed(2)}</span></div>
+          <div class="summary-row total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+          <a href="checkout.html" class="btn btn-primary btn-block">Proceed to Checkout</a>
+          <a href="catalog.html" class="btn btn-ghost btn-block">Continue Shopping</a>
+        </div>
+      </div>`;
+    }
+
+    renderCart();
+    window.renderCart = renderCart;
+  </script>
+</body>
+</html>

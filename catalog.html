@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookNest - Catalog</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">Book<span>Nest</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="catalog.html">Catalog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-icons">
+        <a href="catalog.html">&#128270;</a>
+        <a href="wishlist.html">&#9825; <span class="badge wish-count" style="display:none">0</span></a>
+        <a href="cart.html">&#128722; <span class="badge cart-count" style="display:none">0</span></a>
+        <a href="login.html">&#128100;</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="section">
+      <div class="container">
+        <h2 class="section-title">Books Catalog</h2>
+
+        <div class="catalog-wrap">
+          <aside class="sidebar">
+            <h3>Filters</h3>
+            <div class="filter-group">
+              <label>Search</label>
+              <input type="text" id="searchFilter" placeholder="Search..." oninput="filterBooks()">
+            </div>
+            <div class="filter-group">
+              <label>Category</label>
+              <div class="cat-filter" id="catFilter"></div>
+            </div>
+            <div class="filter-group">
+              <label>Price</label>
+              <div style="display:flex;gap:6px">
+                <input type="number" id="priceMin" placeholder="Min" min="0" oninput="filterBooks()" style="width:50%">
+                <input type="number" id="priceMax" placeholder="Max" min="0" oninput="filterBooks()" style="width:50%">
+              </div>
+            </div>
+            <div class="filter-group">
+              <label>Sort</label>
+              <select id="sortSelect" onchange="filterBooks()">
+                <option value="default">Default</option>
+                <option value="price-asc">Price: Low</option>
+                <option value="price-desc">Price: High</option>
+                <option value="rating">Rating</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+            <button class="btn btn-ghost btn-block" onclick="resetFilters()">Reset</button>
+          </aside>
+
+          <div>
+            <div class="catalog-top">
+              <span class="count" id="resultCount">Showing all books</span>
+              <select onchange="document.getElementById('sortSelect').value=this.value;filterBooks()">
+                <option value="default">Sort: Default</option>
+                <option value="price-asc">Price: Low</option>
+                <option value="price-desc">Price: High</option>
+                <option value="rating">Rating</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+            <div class="grid" id="catalogGrid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>Book<span>Nest</span></h3>
+          <p>Your cozy corner of the literary world.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Links</h4>
+          <ul><li><a href="index.html">Home</a></li><li><a href="catalog.html">Catalog</a></li><li><a href="contact.html">Contact</a></li></ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul><li><a href="#">FAQ</a></li><li><a href="#">Shipping</a></li><li><a href="#">Privacy</a></li></ul>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2024 BookNest</p></div>
+    </div>
+  </footer>
+
+  <div id="toastBox"></div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activeCats = new Set(categories.map(c => c.name));
+
+    function renderCatFilters() {
+      const el = document.getElementById('catFilter');
+      el.innerHTML = categories.map(c => `
+        <label class="active"><input type="checkbox" checked onchange="toggleCat('${c.name}',this)"> ${c.name}</label>
+      `).join('');
+    }
+
+    function toggleCat(name, cb) {
+      cb.checked ? activeCats.add(name) : activeCats.delete(name);
+      filterBooks();
+    }
+
+    function filterBooks() {
+      const search = (document.getElementById('searchFilter').value || '').toLowerCase();
+      const min = parseFloat(document.getElementById('priceMin').value) || 0;
+      const max = parseFloat(document.getElementById('priceMax').value) || Infinity;
+      const sort = document.getElementById('sortSelect').value;
+
+      let result = books.filter(b => {
+        if (!activeCats.has(b.category)) return false;
+        if (b.price < min || b.price > max) return false;
+        if (search && !b.title.toLowerCase().includes(search) && !b.author.toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      switch(sort) {
+        case 'price-asc': result.sort((a,b) => a.price - b.price); break;
+        case 'price-desc': result.sort((a,b) => b.price - a.price); break;
+        case 'rating': result.sort((a,b) => b.rating - a.rating); break;
+        case 'newest': result.sort((a,b) => b.year - a.year || 0); break;
+      }
+
+      document.getElementById('resultCount').textContent = `Showing ${result.length} book${result.length !== 1 ? 's' : ''}`;
+      renderBooks('catalogGrid', result);
+    }
+
+    function resetFilters() {
+      document.getElementById('searchFilter').value = '';
+      document.getElementById('priceMin').value = '';
+      document.getElementById('priceMax').value = '';
+      document.getElementById('sortSelect').value = 'default';
+      activeCats = new Set(categories.map(c => c.name));
+      document.querySelectorAll('#catFilter input').forEach(cb => { cb.checked = true; });
+      filterBooks();
+    }
+
+    // Get URL params
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    const cat = params.get('cat');
+    renderCatFilters();
+    if (q) { document.getElementById('searchFilter').value = q; }
+    if (cat) { activeCats = new Set([cat]); document.querySelectorAll('#catFilter input').forEach(cb => { cb.checked = cb.closest('label').textContent.trim().startsWith(cat); cb.closest('label').className = cb.checked ? 'active' : ''; }); }
+    filterBooks();
+  </script>
+</body>
+</html>
